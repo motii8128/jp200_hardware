@@ -1,3 +1,6 @@
+#ifndef ROS2_JP200_DRIVER__JP200_HARDWARE_HPP_
+#define ROS2_JP200_DRIVER__JP200_HARDWARE_HPP_
+
 #include "rclcpp/rclcpp.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
@@ -64,4 +67,6 @@ namespace jp200_driver
         Gains current_gain = {900, 1500, 0, 0}; 
     };
     
-}
+} // namespace jp200_driver
+
+#endif

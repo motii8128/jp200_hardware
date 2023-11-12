@@ -14,19 +14,6 @@ using hardware_interface::return_type;
 
 namespace jp200_driver
 {
-    class Jp200Driver : public hardware_interface::SystemInterface
-    {
-        public:
-            RCLCPP_SHARED_PTR_DEFINITIONS(Jp200Driver);
-            unsigned int main_loop_update_rate_, desired_hardware_update_rate_ = 100; 
-            CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
-            CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
-            CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
-            return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
-            return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
-
-    };
-
     struct Cmd
     {
         double cmd = 0.0;
@@ -53,9 +40,8 @@ namespace jp200_driver
         int f_gain;
     };
 
-    struct JP200Message
+    struct JP200Cmd
     {
-        uint8_t id = 1;
         uint8_t control_mode;
         Cmd angle_cmd;
         Cmd velocity_cmd;
@@ -66,6 +52,22 @@ namespace jp200_driver
         Gains velocity_gain = {400, 600, 0, 0};
         Gains current_gain = {900, 1500, 0, 0}; 
     };
+    class Jp200Driver : public hardware_interface::SystemInterface
+    {
+        public:
+            RCLCPP_SHARED_PTR_DEFINITIONS(Jp200Driver);
+            unsigned int main_loop_update_rate_, desired_hardware_update_rate_ = 100; 
+            CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
+            CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
+            CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
+            return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
+            return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
+
+        private:
+            std::vector<uint8_t> ids;
+            std::vector<JP200Cmd> msgs;
+    };
+
     
 } // namespace jp200_driver
 

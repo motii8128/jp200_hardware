@@ -13,5 +13,8 @@ namespace jp200_driver
         {
             return CallbackReturn::ERROR;
         }
+
+        msgs.resize(info_.joints.size(), JP200Cmd());
+        
     }
 }

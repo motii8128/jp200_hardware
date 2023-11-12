@@ -19,11 +19,14 @@ namespace jp200_driver
             CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
             CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
             return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
+            return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
     };
 
-    struct Control
+    struct CMD
     {
-        /* data */
+        double cmd{0.0};
+        double trajectory{0.0};
+        double transition_time{0.0};
+        bool response;
     };
-    
 }

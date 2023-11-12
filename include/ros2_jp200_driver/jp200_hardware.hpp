@@ -18,8 +18,10 @@ namespace jp200_driver
             unsigned int main_loop_update_rate_, desired_hardware_update_rate_ = 100; 
             CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
             CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
+            CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
             return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
             return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
+
     };
 
     struct Cmd
@@ -40,7 +42,7 @@ namespace jp200_driver
         bool voltage = false;
         bool status = false;
     };
-    struct PIDConfig
+    struct Gains
     {
         int p_gain;
         int i_gain;
@@ -57,7 +59,9 @@ namespace jp200_driver
         Cmd current_cmd;
         double pwm_cmd = 0.0;
         State state;
-        
+        Gains position_gain = {2000, 5000, 0, 0};
+        Gains velocity_gain = {400, 600, 0, 0};
+        Gains current_gain = {900, 1500, 0, 0}; 
     };
     
 }

@@ -1,5 +1,7 @@
 <library path="jp200_driver">
-    <class name="jp200_hardware/JP200Hardware" type="jp200_hardware::JP200Hardware" base_class_type="hardware_interface::SystemInterface">
+    <class name="jp200_hardware/JP200Hardware" 
+           type="jp200_hardware::JP200Hardware" 
+           base_class_type="hardware_interface::SystemInterface">
         <description>
             jp200 servo motor driver system interface.
         </description>

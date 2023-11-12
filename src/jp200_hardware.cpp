@@ -15,6 +15,10 @@ namespace jp200_hardware
         }
 
         msgs.resize(info_.joints.size(), JP200Cmd());
-        
+        ids.resize(info_.joints.size(), 0);
+        for(uint i = 0; i < info_.joints.size(); i++)
+        {
+            ids[i] = std::stoi(info_.joints[i].parameters.at("id"));
+        }
     }
 }

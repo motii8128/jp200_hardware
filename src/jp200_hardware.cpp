@@ -14,11 +14,10 @@ namespace jp200_hardware
             return CallbackReturn::ERROR;
         }
 
-        msgs.resize(info_.joints.size(), JP200Cmd());
-        ids.resize(info_.joints.size(), 0);
-        for(uint i = 0; i < info_.joints.size(); i++)
-        {
-            ids[i] = std::stoi(info_.joints[i].parameters.at("id"));
-        }
+        RCLCPP_INFO_STREAM(rclcpp::get_logger("jp200_hardware_interface"), "initialize hardware" << info.name);
+
+        port_name = get_hard_param<std::string>("port_name");
+        boudrate = get_hard_param<int>("baudrate");
+        
     }
 }

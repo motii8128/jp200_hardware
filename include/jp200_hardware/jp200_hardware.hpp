@@ -98,6 +98,22 @@ namespace jp200_hardware
                 }
                 
             }
+            void get_hard_param(const std::string & param_name, int & value) const
+            {
+                std::string param_str;
+                get_hard_param(param_name, param_str);
+                value = std::stoi(param_str);
+            }
+            void get_hard_param(const std::string & param_name, bool & value) const
+            {
+                value = false;
+                std::string param_str;
+                get_hard_param(param_name, param_str);
+                if(param_str == "true" || param_str == "True")
+                {
+                    value = true;
+                }
+            }
     };
 
     

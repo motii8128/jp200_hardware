@@ -1,4 +1,7 @@
 #include "jp200_hardware/jp200_hardware.hpp"
+#include <memory>
+#include <vector>
+#include <string>
 
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
@@ -21,5 +24,7 @@ namespace jp200_hardware
         boudrate = get_hard_param<int>("baudrate");
 
         RCLCPP_INFO(rclcpp::get_logger("jp200_hardware_interface"), "initialize port handler");
+
+        port_handler = std::shared_ptr<jp200_hardware::PortHandler>(PortHandler::PortHandler(port_name));
     }
 }

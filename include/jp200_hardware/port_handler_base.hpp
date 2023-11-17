@@ -3,9 +3,7 @@
 
 #include <string>
 
-namespace jp200_hardware
-{
-    class PortHandler
+class PortHandlerBase
     {
         private:
             int socket_fd_;
@@ -26,17 +24,17 @@ namespace jp200_hardware
         public:
             static const int default_baudrate = 115200;
             
-            PortHandler(const std::string port_name);
+            static PortHandlerBase getPortHandler(const std::string port_name);
 
             bool is_using_;
 
-            virtual ~PortHandler() {closePort();};
+            virtual ~PortHandlerBase() {};
 
-            bool openPort();
+            virtual bool openPort() = 0;
 
-            void closePort();
+            virtual void closePort() = 0;
 
-            void clearPort();
+            virtual void clearPort() = 0;
 
             void setPortName(const std::string port_name);
 
@@ -58,6 +56,5 @@ namespace jp200_hardware
 
             bool isPacketTimeout();
     };
-} // namespace jp200_hardware
 
-#endif 
+#endif

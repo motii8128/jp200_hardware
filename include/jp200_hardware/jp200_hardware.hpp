@@ -2,10 +2,13 @@
 #define ROS2_JP200_DRIVER__JP200_HARDWARE_HPP_
 
 #include "rclcpp/rclcpp.hpp"
+#include "rclcpp_lifecycle/state.hpp"
+
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
-#include "rclcpp_lifecycle/state.hpp"
+
+#include "jp200_hardware/port_handler.hpp"
 
 #include <vector>
 #include <string>
@@ -73,7 +76,7 @@ namespace jp200_hardware
         private:
             std::string port_name;
             int boudrate;
-            std::shared_ptr<hardware_interface::ReadWriteHandle> handler;
+            std::shared_ptr<jp200_hardware::PortHandler> port_handler;
             std::vector<uint8_t> ids;
             std::vector<JP200Cmd> msgs;
 

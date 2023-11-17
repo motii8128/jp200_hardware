@@ -2,10 +2,11 @@
 #define PORT_HANDLER_HPP_
 
 #include <string>
+#include "jp200_hardware/port_handler_base.hpp"
 
 namespace jp200_hardware
 {
-    class PortHandler
+    class PortHandler : public PortHandlerBase
     {
         private:
             int socket_fd_;
@@ -24,11 +25,8 @@ namespace jp200_hardware
             double getTimeSinceStart();
 
         public:
-            static const int default_baudrate = 115200;
             
             PortHandler(const std::string port_name);
-
-            bool is_using_;
 
             virtual ~PortHandler() {closePort();};
 

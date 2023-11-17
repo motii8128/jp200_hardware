@@ -1,60 +1,47 @@
-#ifndef PORT_HANDLER_HPP_
-#define PORT_HANDLER_HPP_
+#ifndef PORT_HANDLER_BASE_HPP_
+#define PORT_HANDLER_BASE_HPP_
 
 #include <string>
 
-class PortHandlerBase
-    {
-        private:
-            int socket_fd_;
-            int baudrate_;
-            std::string port_name_;
+namespace jp200_hardware
+{
+    class PortHandlerBase
+        {
+            public:
+                static const int default_baudrate = 115200;
+                
+                static PortHandlerBase *getPortHandler(const std::string port_name);
 
-            double packet_start_time_;
-            double packet_timeout_;
-            double tx_time_per_bytes;
+                bool is_using_;
 
-            bool setupPort(const int c_flag_baud);
-            bool setCustomBaudrate(int speed);
-            int getcFlagBaud(const int baudrate);
+                virtual ~PortHandlerBase() {};
 
-            double getCurrentTime();
-            double getTimeSinceStart();
+                virtual bool openPort() = 0;
 
-        public:
-            static const int default_baudrate = 115200;
-            
-            static PortHandlerBase getPortHandler(const std::string port_name);
+                virtual void closePort() = 0;
 
-            bool is_using_;
+                virtual void clearPort() = 0;
 
-            virtual ~PortHandlerBase() {};
+                virtual void setPortName(const std::string port_name) = 0;
 
-            virtual bool openPort() = 0;
+                virtual std::string getPortName() = 0;
 
-            virtual void closePort() = 0;
+                virtual bool setBaudrate(const int baudrate) = 0;
 
-            virtual void clearPort() = 0;
+                virtual int getBaudrate() = 0;
 
-            void setPortName(const std::string port_name);
+                virtual int getBytesAvailable() = 0;
 
-            std::string getPortName();
+                virtual int readPort(uint8_t *buffer, int length) = 0;
 
-            bool setBaudrate(const int baudrate);
+                virtual int writePort(uint16_t *buffer, int length) = 0;
 
-            int getBaudrate();
+                virtual void setPacketTimeout(uint16_t packet_length) = 0;
+                
+                virtual void setPacketTimeout(double msec) = 0;
 
-            int getBytesAvailable();
-
-            int readPort(uint8_t *buffer, int length);
-
-            int writePort(uint16_t *buffer, int length);
-
-            void setPacketTimeout(uint16_t packet_length);
-            
-            void setPacketTimeout(double msec);
-
-            bool isPacketTimeout();
-    };
+                virtual bool isPacketTimeout() = 0;
+        };
+}
 
 #endif

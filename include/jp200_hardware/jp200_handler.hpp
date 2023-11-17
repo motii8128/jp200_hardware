@@ -5,7 +5,7 @@
 
 #include <string>
 
-class WINDECLSPEC Handler
+class WINDECLSPEC jp200Handler
 {
     private:
         int socket_fd_;
@@ -26,8 +26,8 @@ class WINDECLSPEC Handler
     public:
         static const int default_baudrate = 115200;
         
-        static Handler *getPortHandler(const std::string *port_name);
-        virtual ~Handler(){};
+        static jp200Handler *getPortHandler(const std::string *port_name);
+        virtual ~jp200Handler(){closePort();};
 
         bool openPort();
 

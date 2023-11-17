@@ -59,10 +59,16 @@ namespace jp200_hardware
             RCLCPP_SHARED_PTR_DEFINITIONS(JP200Hardware);
             unsigned int main_loop_update_rate_, desired_hardware_update_rate_ = 100; 
             CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
+
             CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
             CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
+
+            std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+            std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+
             return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
             return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
+
 
         private:
             std::string port_name;

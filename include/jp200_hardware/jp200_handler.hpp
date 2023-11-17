@@ -1,11 +1,9 @@
 #ifndef JP200_HANDLER_HPP_
 #define JP200_HANDLER_HPP_
 
-#define WINDECLSPEC
-
 #include <string>
 
-class WINDECLSPEC jp200Handler
+class JP200Handler
 {
     private:
         int socket_fd_;
@@ -26,8 +24,11 @@ class WINDECLSPEC jp200Handler
     public:
         static const int default_baudrate = 115200;
         
-        static jp200Handler *getPortHandler(const std::string *port_name);
-        virtual ~jp200Handler(){closePort();};
+        static JP200Handler getPortHandler(const std::string port_name);
+
+        bool is_using_;
+
+        virtual ~JP200Handler(){closePort();};
 
         bool openPort();
 
@@ -35,7 +36,7 @@ class WINDECLSPEC jp200Handler
 
         void clearPort();
 
-        void setPortName(const std::string *port_name);
+        void setPortName(const std::string port_name);
 
         std::string *getPortName();
 

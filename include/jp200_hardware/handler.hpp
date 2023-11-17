@@ -1,9 +1,11 @@
 #ifndef HANDLER_HPP_
 #define HANDLER_HPP_
 
+#define WINDECLSPEC
+
 #include <string>
 
-class Handler
+class WINDECLSPEC Handler
 {
     private:
         int socket_fd_;
@@ -24,8 +26,34 @@ class Handler
     public:
         static const int default_baudrate = 115200;
         
-        Handler(const std::string *port_name);
+        static Handler *getPortHandler(const std::string *port_name);
+        virtual ~Handler(){};
+
+        bool openPort();
+
+        void closePort();
+
+        void clearPort();
+
+        void setPortName(const std::string *port_name);
+
+        std::string *getPortName();
+
+        bool setBaudrate(const int baudrate);
+
+        int getBaudrate();
+
+        int getBytesAvailable();
+
+        int readPort(uint8_t *packet, int length);
+
+        int writePort(uint8_t *packet, int length);
+
+        void setPacketTimeout(uint16_t packet_length);
         
+        void setPacketTimeout(double msec);
+
+        bool isPacketTimeout();
 };
 
 #endif 

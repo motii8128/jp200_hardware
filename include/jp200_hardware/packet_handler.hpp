@@ -16,6 +16,14 @@
 #define COMM_RX_CORRUPT     -3002   
 #define COMM_NOT_AVAILABLE  -9000   
 
+#define PKT_HEADER0             0
+#define PKT_HEADER1             1
+#define PKT_ID                  2
+#define PKT_LENGTH              3
+#define PKT_INSTRUCTION         4
+#define PKT_ERROR               4
+#define PKT_PARAMETER0          5
+
 namespace jp200_hardware
 {
     class PacketHandler

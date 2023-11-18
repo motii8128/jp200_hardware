@@ -2,6 +2,9 @@
 
 #include <string>
 
+#define TXPACKET_MAX_LEN    (250)
+#define RXPACKET_MAX_LEN    (250)
+
 namespace jp200_hardware
 {
     PacketHandler *PacketHandler::unique_instance_ = new PacketHandler();
@@ -42,6 +45,33 @@ namespace jp200_hardware
         
         default:
             return "";
+        }
+    }
+
+    int PacketHandler::TxPacket(HandlerBase *port, uint8_t *tx_packet)
+    {
+        uint8_t checksum = 0;
+        uint8_t total_packet_length = tx_packet[PKT_LENGTH] + 4;
+        uint8_t written_packet_length = 0;
+
+        if(port->is_using_)
+        {
+            return COMM_PORT_BUSY;
+            port->is_using_ = true;
+        }
+
+        if(total_packet_length > TXPACKET_MAX_LEN)
+        {
+            port->is_using_ = false;
+            return COMM_TX_ERROR;
+        }
+
+        tx_packet[PKT_HEADER0] = 0xff;
+        tx_packet[PKT_HEADER1] = 0xff;
+
+        for(uint16_t idx = 2; idx < total_packet_length; idx++)
+        {
+            
         }
     }
 }

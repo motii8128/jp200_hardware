@@ -50,6 +50,29 @@ namespace jp200_hardware
 
             virtual int read_1ByteTx(HandlerBase *port, uint8_t id, uint16_t addr) = 0;
 
+            virtual int read_1ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0) = 0;
+
+            virtual int read_1ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0) = 0;
+
+            virtual int read_2ByteTx(HandlerBase *port, uint8_t id, uint16_t addr) = 0;
+
+            virtual int read_2ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0) = 0;
+
+            virtual int read_2ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0) = 0;
+
+            virtual int read_4ByteTx(HandlerBase *port, uint8_t id, uint16_t addr) = 0;
+
+            virtual int read_4ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0) = 0;
+
+            virtual int read_4ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0) = 0;
+
+            virtual int writeTxOnly(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, u_int8_t *data) = 0;
+
+            virtual int writeTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, uint8_t *data, uint8_t *err = 0) = 0;
+
+            virtual int write_1ByteTxOnly(HandlerBase *port, uint8_t id, uint16_t address, uint8_t data) = 0;
+
+            virtual int write_1ByteTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint8_t data, uint8_t *err = 0) = 0;
     };
 }
 

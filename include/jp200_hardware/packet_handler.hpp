@@ -6,6 +6,16 @@
 #include <string>
 #include <vector>
 
+#define COMM_SUCCESS 0
+#define COMM_PORT_BUSY -1000
+#define COMM_TX_FAIL        -1001   
+#define COMM_RX_FAIL        -1002   
+#define COMM_TX_ERROR       -2000   
+#define COMM_RX_WAITING     -3000   
+#define COMM_RX_TIMEOUT     -3001   
+#define COMM_RX_CORRUPT     -3002   
+#define COMM_NOT_AVAILABLE  -9000   
+
 namespace jp200_hardware
 {
     class PacketHandler

@@ -100,7 +100,7 @@ namespace jp200_hardware
         return read(socket_fd_, buffer, length);
     }
 
-    int PortHandler::writePort(uint16_t *buffer, int length)
+    int PortHandler::writePort(uint8_t *buffer, int length)
     {
         return write(socket_fd_, buffer, length);
     }

@@ -55,10 +55,8 @@ namespace jp200_hardware
         uint8_t written_packet_length = 0;
 
         if(port->is_using_)
-        {
             return COMM_PORT_BUSY;
-            port->is_using_ = true;
-        }
+        port->is_using_ = true;
 
         if(total_packet_length > TXPACKET_MAX_LEN)
         {
@@ -70,8 +68,10 @@ namespace jp200_hardware
         tx_packet[PKT_HEADER1] = 0xff;
 
         for(uint16_t idx = 2; idx < total_packet_length; idx++)
-        {
-            
-        }
+            checksum += tx_packet[idx];
+        tx_packet[total_packet_length - 1] = ~checksum;
+
+        port->clearPort();
+        written_packet_length = port->writePort(tx_packet);
     }
 }

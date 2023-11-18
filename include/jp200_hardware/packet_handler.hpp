@@ -10,69 +10,81 @@ namespace jp200_hardware
 {
     class PacketHandler
     {
-        protected:
-            PacketHandler() {}
+        private:
+            static PacketHandler *unique_instance_;
+
+            PacketHandler();
 
         public:
-            static PacketHandler *getPacketHandler(float protocol_ver = 2.0);
+            static PacketHandler *getInstance(){return unique_instance_;};
 
-            virtual ~PacketHandler() {}
+            virtual ~PacketHandler() { }
 
-            virtual float getProtocolVersion() = 0;
+            const std::string getTxRxResult(int result);
 
-            virtual const std::string getTxRxResult(int result) = 0;
+            const std::string getRxPacketError(uint8_t err);
 
-            virtual const std::string getRxPacketError(uint8_t err) = 0;
+            int TxPacket(HandlerBase *port, uint8_t *tx_packet);
 
-            virtual int TxPacket(HandlerBase *port, uint8_t *tx_packet) = 0;
+            int RxPacket(HandlerBase *port, uint8_t *rx_packet);
 
-            virtual int RxPacket(HandlerBase *port, uint8_t *rx_packet) = 0;
+            int ID(HandlerBase *port, uint8_t id, uint8_t *err = 0);
 
-            virtual int ID(HandlerBase *port, uint8_t id, uint8_t *err = 0) = 0;
+            int ID(HandlerBase *port, uint8_t id, uint16_t *model_number, uint8_t *err = 0);
 
-            virtual int ID(HandlerBase *port, uint8_t id, uint16_t *model_number, uint8_t *err = 0) = 0;
+            int broadcastID(HandlerBase *port, std::vector<uint8_t> &id_list);
 
-            virtual int broadcastID(HandlerBase *port, std::vector<uint8_t> &id_list) = 0;
+            int action(HandlerBase *port, uint8_t id);
 
-            virtual int action(HandlerBase *port, uint8_t id) = 0;
+            int reboot(HandlerBase *port, uint8_t id, uint8_t *err = 0);
 
-            virtual int reboot(HandlerBase *port, uint8_t id, uint8_t *err = 0) = 0;
+            int clearMultiTurn(HandlerBase *port, uint8_t id, uint8_t *err = 0);
 
-            virtual int clearMultiTurn(HandlerBase *port, uint8_t id, uint8_t *err = 0) = 0;
+            int factoryReset(HandlerBase *port, uint8_t id, uint8_t option = 0, uint8_t *err = 0);
 
-            virtual int factoryReset(HandlerBase *port, uint8_t id, uint8_t option = 0, uint8_t *err = 0) = 0;
+            int readTx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length);
 
-            virtual int readTx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length) = 0;
+            int readRx(HandlerBase *port, uint8_t id, uint16_t length, uint8_t *data, uint8_t *err = 0);
 
-            virtual int readRx(HandlerBase *port, uint8_t id, uint16_t length, uint8_t *data, uint8_t *err = 0) = 0;
+            int readTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, uint8_t *data, uint8_t *err = 0);
 
-            virtual int readTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, uint8_t *data, uint8_t *err = 0) = 0;
+            int read_1ByteTx(HandlerBase *port, uint8_t id, uint16_t addr);
 
-            virtual int read_1ByteTx(HandlerBase *port, uint8_t id, uint16_t addr) = 0;
+            int read_1ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0);
 
-            virtual int read_1ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0) = 0;
+            int read_1ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0);
 
-            virtual int read_1ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0) = 0;
+            int read_2ByteTx(HandlerBase *port, uint8_t id, uint16_t addr);
 
-            virtual int read_2ByteTx(HandlerBase *port, uint8_t id, uint16_t addr) = 0;
+            int read_2ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0);
 
-            virtual int read_2ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0) = 0;
+            int read_2ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0);
 
-            virtual int read_2ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0) = 0;
+            int read_4ByteTx(HandlerBase *port, uint8_t id, uint16_t addr);
 
-            virtual int read_4ByteTx(HandlerBase *port, uint8_t id, uint16_t addr) = 0;
+            int read_4ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0);
 
-            virtual int read_4ByteRx(HandlerBase *port, uint8_t id, uint8_t *data, uint8_t *err = 0) = 0;
+            int read_4ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0);
 
-            virtual int read_4ByteTxRx(HandlerBase *port, u_int8_t id, uint16_t addr, uint8_t *data, uint8_t *err = 0) = 0;
+            int writeTxOnly(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, u_int8_t *data);
 
-            virtual int writeTxOnly(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, u_int8_t *data) = 0;
+            int writeTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, uint8_t *data, uint8_t *err = 0);
 
-            virtual int writeTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, uint8_t *data, uint8_t *err = 0) = 0;
+            int write_1ByteTxOnly(HandlerBase *port, uint8_t id, uint16_t address, uint8_t data);
 
-            virtual int write_1ByteTxOnly(HandlerBase *port, uint8_t id, uint16_t address, uint8_t data) = 0;
+            int write_1ByteTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint8_t data, uint8_t *err = 0);
 
-            virtual int write_1ByteTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint8_t data, uint8_t *err = 0) = 0;
+            int write_2ByteTxOnly(HandlerBase *port, uint8_t id, uint16_t address, uint16_t data);
+
+            int write_2ByteTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t data, uint8_t *err = 0);
+
+            int write_2ByteTxOnly(HandlerBase *port, uint8_t id, uint16_t address, uint32_t data);
+
+            int write_2ByteTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint32_t data, uint8_t *err = 0);
+
+            int regWriteTxOnly(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, uint8_t *data);
+
+            int regWriteTxRx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length, uint64_t *data, uint8_t *err = 0);
     };
 }
 

@@ -48,7 +48,7 @@ namespace jp200_hardware
 
             int readPort(uint8_t *buffer, int length);
 
-            int writePort(uint16_t *buffer, int length);
+            int writePort(uint8_t *buffer, int length);
 
             void setPacketTimeout(uint16_t packet_length);
             

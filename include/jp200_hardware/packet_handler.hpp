@@ -25,6 +25,14 @@ namespace jp200_hardware
             virtual const std::string getRxPacketError(uint8_t err) = 0;
 
             virtual int TxPacket(HandlerBase *port, uint8_t *tx_packet) = 0;
+
+            virtual int RxPacket(HandlerBase *port, uint8_t *rx_packet) = 0;
+
+            virtual int ID(HandlerBase *port, uint8_t id, uint8_t *err = 0) = 0;
+
+            virtual int ID(HandlerBase *port, uint8_t id, uint16_t *model_number, uint8_t *err = 0) = 0;
+
+            virtual int broadcastID(HandlerBase *port, std::vector<uint8_t> &id_list) = 0;
     };
 }
 

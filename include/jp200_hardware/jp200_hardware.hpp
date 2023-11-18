@@ -76,7 +76,7 @@ namespace jp200_hardware
         private:
             std::string port_name;
             int boudrate;
-            std::shared_ptr<jp200_hardware::PortHandlerBase> port_handler;
+            std::shared_ptr<jp200_hardware::HandlerBase> port_handler;
             std::vector<uint8_t> ids;
             std::vector<JP200Cmd> msgs;
 

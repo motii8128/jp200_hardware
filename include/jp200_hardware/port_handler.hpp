@@ -2,11 +2,11 @@
 #define PORT_HANDLER_HPP_
 
 #include <string>
-#include "jp200_hardware/port_handler_base.hpp"
+#include "jp200_hardware/handler_base.hpp"
 
 namespace jp200_hardware
 {
-    class PortHandler : public PortHandlerBase
+    class PortHandler : public HandlerBase
     {
         private:
             int socket_fd_;

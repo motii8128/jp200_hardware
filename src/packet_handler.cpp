@@ -2,9 +2,6 @@
 
 #include <string>
 
-#define TXPACKET_MAX_LEN    (250)
-#define RXPACKET_MAX_LEN    (250)
-
 namespace jp200_hardware
 {
     PacketHandler *PacketHandler::unique_instance_ = new PacketHandler();
@@ -197,5 +194,58 @@ namespace jp200_hardware
         int result = COMM_TX_FAIL;
 
         result = TxPacket(port, tx_packet);
+        if(result != COMM_SUCCESS)
+        {
+            return result;
+        }
+
+        if (tx_packet[PKT_ID] == BROADCAST_ID)
+        {
+            port->is_using_ = false;
+            return result;
+        }
+
+        // set packet timeout
+        if (tx_packet[PKT_INSTRUCTION] == 2)
+        {
+            port->setPacketTimeout((uint16_t)(tx_packet[PKT_PARAMETER0+1] + 6));
+        }
+        else
+        {
+            port->setPacketTimeout((uint16_t)6);
+        }
+
+        // rx packet
+        do {
+            result = RxPacket(port, rx_packet, false);
+        } while (result == COMM_SUCCESS && tx_packet[PKT_ID] != rx_packet[PKT_ID]);
+
+        if (result == COMM_SUCCESS && tx_packet[PKT_ID] == rx_packet[PKT_ID])
+        {
+            if (err != 0)
+            *err = (uint8_t)rx_packet[PKT_ERROR];
+        }
+
+        return result;
+    }
+
+    int PacketHandler::ID(HandlerBase *port, uint8_t id, uint8_t *err)
+    {
+        return ID(port, id, 0, err);
+    }
+
+    int PacketHandler::ID(HandlerBase *port, uint8_t id, uint16_t *model_number, uint8_t *err)
+    {
+        int result = COMM_TX_FAIL;
+
+        uint8_t tx_packet[6] = {0};
+        uint8_t rx_packet[6] = {0};
+
+        if(id >= BROADCAST_ID)
+        {
+            return COMM_NOT_AVAILABLE;
+        }
+
+        tx_packet[PKT_ID] = id;
     }
 }

@@ -166,10 +166,36 @@ namespace jp200_hardware
                 {
                     for(uint16_t s = 0; s < rx_length; s++)
                     {
-                        
+                        rx_packet[s] = rx_packet[idx + s];
                     }
+                    rx_length -= idx;
+                }
+            }
+            else
+            {
+                if(port->isPacketTimeout() == true)
+                {
+                    if(rx_length == 0)
+                    {
+                        result = COMM_RX_TIMEOUT;
+                    }
+                    else
+                    {
+                        result = COMM_RX_CORRUPT;
+                    }
+                    break;
                 }
             }
         }
+        port->is_using_ = false;
+
+        return result;
+    }
+
+    int PacketHandler::TxRxPacket(HandlerBase *port, uint8_t *tx_packet, uint8_t *rx_packet, uint8_t *err)
+    {
+        int result = COMM_TX_FAIL;
+
+        result = TxPacket(port, tx_packet);
     }
 }

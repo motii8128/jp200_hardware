@@ -24,6 +24,12 @@
 #define PKT_ERROR               4
 #define PKT_PARAMETER0          5
 
+#define TXPACKET_MAX_LEN    (250)
+#define RXPACKET_MAX_LEN    (250)
+
+#define BROADCAST_ID 0xFE
+#define MAX_ID 0xFC
+
 namespace jp200_hardware
 {
     class PacketHandler
@@ -45,6 +51,8 @@ namespace jp200_hardware
             int TxPacket(HandlerBase *port, uint8_t *tx_packet);
 
             int RxPacket(HandlerBase *port, uint8_t *rx_packet, bool skip_stuffing);
+
+            int TxRxPacket(HandlerBase *port, uint8_t *tx_packet, uint8_t *rx_packet, uint8_t *err);
 
             int ID(HandlerBase *port, uint8_t id, uint8_t *err = 0);
 

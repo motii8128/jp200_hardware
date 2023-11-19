@@ -9,6 +9,7 @@
 #include "hardware_interface/system_interface.hpp"
 
 #include "jp200_hardware/port_handler.hpp"
+#include "jp200_hardware/packet_handler.hpp"
 
 #include <vector>
 #include <string>
@@ -20,6 +21,7 @@ namespace jp200_hardware
 {
     struct Cmd
     {
+        bool enable;
         double cmd;
         double trajectory;
         double transition_time;
@@ -77,9 +79,15 @@ namespace jp200_hardware
             std::string port_name;
             int boudrate;
             std::shared_ptr<jp200_hardware::HandlerBase> port_handler;
+            std::shared_ptr<jp200_hardware::PacketHandler> packet_handler;
             std::vector<uint8_t> ids;
             std::vector<JP200Cmd> msgs;
 
+            void setCmd(JP200Cmd *cmd)
+            {
+                cmd->control_mode = get_hard_param<int>("control_mode");
+            }
+            std::string createPacket(JP200Cmd cmd, uint8_t *tx_packet);
         
             template <typename T>
             T get_hard_param(const std::string param_name) const

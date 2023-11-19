@@ -24,8 +24,21 @@ namespace jp200_hardware
         boudrate = get_hard_param<int>("baudrate");
 
         RCLCPP_INFO(rclcpp::get_logger("jp200_hardware_interface"), "initialize port handler");
-
         port_handler = std::shared_ptr<jp200_hardware::HandlerBase>(HandlerBase::getHandler(port_name));
         port_handler->setBaudrate(boudrate);
+
+        RCLCPP_INFO(rclcpp::get_logger("jp200_hardware_interface"), "initialize packet handler");
+        packet_handler = std::shared_ptr<jp200_hardware::PacketHandler>(PacketHandler::getInstance());
+
+        if(port_handler->openPort())
+        {
+            RCLCPP_INFO(rclcpp::get_logger("jp200_hardware_interface"), "Succeed to open serial port");
+        }
+        else
+        {
+            RCLCPP_ERROR(rclcpp::get_logger("jp200_hardware_interface"), "Failed to open serial port");
+            return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::ERROR;
+        }
     }
+    
 }

@@ -247,5 +247,8 @@ namespace jp200_hardware
         }
 
         tx_packet[PKT_ID] = id;
+        
+
+        return result;
     }
 }

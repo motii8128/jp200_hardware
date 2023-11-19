@@ -44,7 +44,7 @@ namespace jp200_hardware
 
             int TxPacket(HandlerBase *port, uint8_t *tx_packet);
 
-            int RxPacket(HandlerBase *port, uint8_t *rx_packet);
+            int RxPacket(HandlerBase *port, uint8_t *rx_packet, bool skip_stuffing);
 
             int ID(HandlerBase *port, uint8_t id, uint8_t *err = 0);
 

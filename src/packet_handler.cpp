@@ -72,6 +72,25 @@ namespace jp200_hardware
         tx_packet[total_packet_length - 1] = ~checksum;
 
         port->clearPort();
-        written_packet_length = port->writePort(tx_packet);
+        written_packet_length = port->writePort(tx_packet, total_packet_length);
+
+        if(total_packet_length != written_packet_length)
+        {
+            port->is_using_ = false;
+            return COMM_TX_FAIL;
+        }
+
+        return COMM_SUCCESS;
+    }
+
+    int PacketHandler::RxPacket(HandlerBase *port, uint8_t *rx_packet, bool skip_stuffing)
+    {
+        int result = COMM_TX_FAIL;
+
+        uint8_t checksum = 0;
+        uint8_t rx_length = 0;
+        uint8_t wait_length = 6;
+
+        
     }
 }

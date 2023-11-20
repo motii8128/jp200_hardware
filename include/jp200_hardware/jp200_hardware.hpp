@@ -14,6 +14,11 @@
 #include <vector>
 #include <string>
 
+#define TARGET_ANGLE_MARK 'a'
+#define TARGET_VELOCITY_MARK 'v'
+#define TARGET_CURRENT_MARK 'c'
+#define TARGET_PWM_MARK 'p'
+
 using hardware_interface::CallbackReturn;
 using hardware_interface::return_type;
 
@@ -40,6 +45,7 @@ namespace jp200_hardware
     struct JP200Cmd
     {
         uint8_t id;
+        bool enable_control_mode;
         uint8_t control_mode;
         Cmd angle;
         Cmd velocity;
@@ -83,6 +89,7 @@ namespace jp200_hardware
                 JP200Cmd cmd = {};
                 cmd.id = getHardwareParam<int>("id");
                 // 0~254
+                cmd.enable_control_mode = getHardwareParam<bool>("enable_control_mode");
                 cmd.control_mode = getHardwareParam<int>("control_mode");
                 /*
                 0:shutdown free mode
@@ -118,9 +125,22 @@ namespace jp200_hardware
                 
                 return cmd;
             }
-            std::string createJP200Cmd(JP200Cmd cmd)
+            std::string createCmdBase(JP200Cmd cmd)
             {
-                std::string result = "<";
+                std::string result = "<#";
+                result += cmd.id;
+
+                if(cmd.enable_control_mode){
+                    result += "EX=";
+                    result += cmd.control_mode;
+                }
+
+                if(cmd.angle.enable)result+="TA=" + TARGET_ANGLE_MARK;
+                if(cmd.velocity.enable)result+="TV=" + TARGET_VELOCITY_MARK;
+                if(cmd.current.enable)result+="TC=" + TARGET_CURRENT_MARK;
+                if(cmd.pwm.enable)result+="TP=p" + TARGET_PWM_MARK;
+
+                return result;
             }
         
             template <typename T>

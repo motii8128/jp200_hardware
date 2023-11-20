@@ -82,7 +82,21 @@ namespace jp200_hardware
             {
                 JP200Cmd cmd = {};
                 cmd.id = getHardwareParam<int>("id");
+                // 0~254
                 cmd.control_mode = getHardwareParam<int>("control_mode");
+                /*
+                0:shutdown free mode
+                1:angle mode
+                2:velocity mode
+                3:angle+velocity mode
+                4:current mode 
+                5:angle+current mode 
+                6:velocity+current mode
+                7:angle+velocity+current mode
+                8:pwm mode
+                14:Stop(pwm) mode
+                15:shutdown break mode
+                */
 
                 cmd.angle.enable = getHardwareParam<bool>("target_angle");
                 cmd.velocity.enable = getHardwareParam<bool>("target_velocuty");

@@ -83,20 +83,21 @@ namespace jp200_hardware
             std::vector<uint8_t> ids;
             std::vector<JP200Cmd> msgs;
 
-            void setCmd(JP200Cmd *cmd)
+            void getCmd(JP200Cmd *cmd)
             {
                 cmd->control_mode = get_hard_param<int>("control_mode");
+
             }
-            std::string createPacket(JP200Cmd cmd, uint8_t *tx_packet);
+            std::string createPa(JP200Cmd cmd, uint8_t *tx_packet);
         
             template <typename T>
-            T get_hard_param(const std::string param_name) const
+            T getHardParam(const std::string param_name) const
             {
                 T value;
                 get_hard_param(param_name, value);
                 return value;
             }
-            void get_hard_param(const std::string & param_name, std::string & value) const
+            void gethard_param(const std::string & param_name, std::string & value) const
             {
                 try
                 {

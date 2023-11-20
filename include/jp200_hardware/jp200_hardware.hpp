@@ -83,10 +83,12 @@ namespace jp200_hardware
             std::vector<uint8_t> ids;
             std::vector<JP200Cmd> msgs;
 
-            void getCmd(JP200Cmd *cmd)
+            JP200Cmd getCmd()
             {
-                cmd->control_mode = get_hard_param<int>("control_mode");
-
+                JP200Cmd cmd;
+                cmd.control_mode = getHardwareParam<int>("control_mode");
+                
+                return cmd;
             }
             std::string createPa(JP200Cmd cmd, uint8_t *tx_packet);
         

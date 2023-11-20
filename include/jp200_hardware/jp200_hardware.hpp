@@ -19,41 +19,36 @@ using hardware_interface::return_type;
 
 namespace jp200_hardware
 {
+    struct Gains
+    {
+        bool enable;
+        float p;
+        float i;
+        float d;
+        float f;
+    };
+
     struct Cmd
     {
         bool enable;
-        double cmd;
-        double trajectory;
-        double transition_time;
-    };
-    struct State
-    {
-        bool angle{false};
-        bool velocity{false};
-        bool current{false};
-        bool pwm{false};
-        bool mpu_temp{false};
-        bool amp_temp{false};
-        bool motor_temp{false};
-        bool voltage{false};
-        bool status{false};
-    };
-    struct Gains
-    {
-        int p_gain;
-        int i_gain;
-        int d_gain;
-        int f_gain;
+        float cmd;
+        float trajectory;
+        float transition_time;
+        bool get_state;
     };
 
     struct JP200Cmd
     {
+        uint8_t id;
         uint8_t control_mode;
-        Cmd angle_cmd;
-        Cmd velocity_cmd;
-        Cmd current_cmd;
-        double pwm_cmd;
-        State state;
+        Cmd angle;
+        Cmd velocity;
+        Cmd current;
+        Cmd pwm;
+        bool get_mpu_temp;
+        bool get_amp_temp;
+        bool get_motor_temp;
+        bool get_voltage;
         Gains position_gain;
         Gains velocity_gain;
         Gains current_gain; 
@@ -83,14 +78,36 @@ namespace jp200_hardware
             std::vector<uint8_t> ids;
             std::vector<JP200Cmd> msgs;
 
-            JP200Cmd getCmd()
+            JP200Cmd getJP200Param()
             {
-                JP200Cmd cmd;
+                JP200Cmd cmd = {};
+                cmd.id = getHardwareParam<int>("id");
                 cmd.control_mode = getHardwareParam<int>("control_mode");
+
+                cmd.angle.enable = getHardwareParam<bool>("target_angle");
+                cmd.velocity.enable = getHardwareParam<bool>("target_velocuty");
+                cmd.current.enable = getHardwareParam<bool>("target_current");
+                cmd.pwm.enable = getHardwareParam<bool>("target_pwm");
+
+                cmd.angle.get_state = getHardwareParam<bool>("get_angle");
+                cmd.velocity.get_state = getHardwareParam<bool>("get_velocity");
+                cmd.current.get_state = getHardwareParam<bool>("get_current");
+                cmd.pwm.get_state = getHardwareParam<bool>("get_pwm");
+
+                cmd.get_mpu_temp = getHardwareParam<bool>("get_mpu_temp");
+                cmd.get_amp_temp = getHardwareParam<bool>("get_amp_temp");
+                cmd.get_motor_temp = getHardwareParam<bool>("get_motor_temp");
+
+                cmd.position_gain.enable = getHardwareParam<bool>("set_position_gain");
+                cmd.velocity_gain.enable = getHardwareParam<bool>("set_position_gain");
+                cmd.current_gain.enable = getHardwareParam<bool>("set_current_gain");
                 
                 return cmd;
             }
-            std::string createPa(JP200Cmd cmd, uint8_t *tx_packet);
+            std::string createJP200Cmd(JP200Cmd cmd)
+            {
+                std::string result = "<";
+            }
         
             template <typename T>
             T getHardwareParam(const std::string param_name) const
@@ -109,7 +126,8 @@ namespace jp200_hardware
                 {
                     RCLCPP_ERROR_STREAM(
                         rclcpp::get_logger("jp200_hardware"),
-                        "hardware parameter :" << param_name << "does not exist.");
+                        "Set" << param_name << "default.");
+                    value = "0";
                 }
                 
             }

@@ -91,13 +91,13 @@ namespace jp200_hardware
             std::string createPa(JP200Cmd cmd, uint8_t *tx_packet);
         
             template <typename T>
-            T getHardParam(const std::string param_name) const
+            T getHardwareParam(const std::string param_name) const
             {
                 T value;
-                get_hard_param(param_name, value);
+                getHardParam(param_name, value);
                 return value;
             }
-            void gethard_param(const std::string & param_name, std::string & value) const
+            void getHardwareParam(const std::string & param_name, std::string & value) const
             {
                 try
                 {
@@ -111,17 +111,17 @@ namespace jp200_hardware
                 }
                 
             }
-            void get_hard_param(const std::string & param_name, int & value) const
+            void getHardwareParam(const std::string & param_name, int & value) const
             {
                 std::string param_str;
-                get_hard_param(param_name, param_str);
+                getHardwareParam(param_name, param_str);
                 value = std::stoi(param_str);
             }
-            void get_hard_param(const std::string & param_name, bool & value) const
+            void getHardwareParam(const std::string & param_name, bool & value) const
             {
                 value = false;
                 std::string param_str;
-                get_hard_param(param_name, param_str);
+                getHardwareParam(param_name, param_str);
                 if(param_str == "true" || param_str == "True")
                 {
                     value = true;

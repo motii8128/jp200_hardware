@@ -14,11 +14,6 @@
 #include <vector>
 #include <string>
 
-#define TARGET_ANGLE_MARK 'a'
-#define TARGET_VELOCITY_MARK 'v'
-#define TARGET_CURRENT_MARK 'c'
-#define TARGET_PWM_MARK 'p'
-
 using hardware_interface::CallbackReturn;
 using hardware_interface::return_type;
 
@@ -55,6 +50,7 @@ namespace jp200_hardware
         bool get_amp_temp;
         bool get_motor_temp;
         bool get_voltage;
+        bool get_status;
         Gains position_gain;
         Gains velocity_gain;
         Gains current_gain; 
@@ -118,6 +114,7 @@ namespace jp200_hardware
                 cmd.get_mpu_temp = getHardwareParam<bool>("get_mpu_temp");
                 cmd.get_amp_temp = getHardwareParam<bool>("get_amp_temp");
                 cmd.get_motor_temp = getHardwareParam<bool>("get_motor_temp");
+                cmd.get_status = getHardwareParam<bool>("get_status");
 
                 cmd.position_gain.enable = getHardwareParam<bool>("set_position_gain");
                 cmd.velocity_gain.enable = getHardwareParam<bool>("set_position_gain");
@@ -135,10 +132,25 @@ namespace jp200_hardware
                     msg += cmd.control_mode;
                 }
 
-                if(cmd.angle.enable)msg+="TA=" + TARGET_ANGLE_MARK;
-                if(cmd.velocity.enable)msg+="TV=" + TARGET_VELOCITY_MARK;
-                if(cmd.current.enable)msg+="TC=" + TARGET_CURRENT_MARK;
-                if(cmd.pwm.enable)msg+="TP=p" + TARGET_PWM_MARK;
+                // cmd
+                if(cmd.angle.enable)msg+="TA=";
+                if(cmd.velocity.enable)msg+="TV=";
+                if(cmd.current.enable)msg+="TC=";
+                if(cmd.pwm.enable)msg+="TP=";
+
+                // get state
+                if(cmd.angle.get_state)msg+="CA";
+                if(cmd.velocity.get_state)msg+="CV";
+                if(cmd.current.get_state)msg+="CC";
+                if(cmd.pwm.get_state)msg+="CP";
+                if(cmd.get_mpu_temp)msg+="CT0";
+                if(cmd.get_amp_temp)msg+="CT1";
+                if(cmd.get_motor_temp)msg+="CT2";
+                if(cmd.get_voltage)msg+="CB";
+                if(cmd.get_status)msg+="ST";
+                if(cmd.position_gain.enable)msg+="SG0=";
+                if(cmd.velocity_gain.enable)msg+="SG1=";
+                if(cmd.current_gain.enable)msg+="SG2=";
 
                 return msg;
             }

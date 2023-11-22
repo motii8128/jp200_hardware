@@ -127,20 +127,20 @@ namespace jp200_hardware
             }
             std::string createCmdBase(JP200Cmd cmd)
             {
-                std::string result = "<#";
-                result += cmd.id;
+                std::string msg = "<#";
+                msg += cmd.id;
 
                 if(cmd.enable_control_mode){
-                    result += "EX=";
-                    result += cmd.control_mode;
+                    msg += "EX=";
+                    msg += cmd.control_mode;
                 }
 
-                if(cmd.angle.enable)result+="TA=" + TARGET_ANGLE_MARK;
-                if(cmd.velocity.enable)result+="TV=" + TARGET_VELOCITY_MARK;
-                if(cmd.current.enable)result+="TC=" + TARGET_CURRENT_MARK;
-                if(cmd.pwm.enable)result+="TP=p" + TARGET_PWM_MARK;
+                if(cmd.angle.enable)msg+="TA=" + TARGET_ANGLE_MARK;
+                if(cmd.velocity.enable)msg+="TV=" + TARGET_VELOCITY_MARK;
+                if(cmd.current.enable)msg+="TC=" + TARGET_CURRENT_MARK;
+                if(cmd.pwm.enable)msg+="TP=p" + TARGET_PWM_MARK;
 
-                return result;
+                return msg;
             }
         
             template <typename T>

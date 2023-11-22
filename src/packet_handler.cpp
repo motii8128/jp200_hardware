@@ -251,4 +251,55 @@ namespace jp200_hardware
 
         return result;
     }
+
+    int PacketHandler::broadcastID(HandlerBase *port, std::vector<uint8_t> &id_list)
+    {
+        return COMM_NOT_AVAILABLE;
+    }
+
+    int PacketHandler::action(HandlerBase *port, uint8_t id)
+    {
+        uint8_t tx_packet[6] = {0};
+
+        tx_packet[PKT_ID] = id;
+        tx_packet[PKT_LENGTH] = 2;
+        tx_packet[PKT_INSTRUCTION] = 5;
+
+        //return TxRxPacket(port, tx_packet, 0);
+    }
+
+    int PacketHandler::reboot(HandlerBase *port, uint8_t id, uint8_t *err)
+    {
+        return COMM_NOT_AVAILABLE;
+    }
+
+    int PacketHandler::clearMultiTurn(HandlerBase *port, uint8_t id, uint8_t *err)
+    {
+        return COMM_NOT_AVAILABLE;
+    }
+
+    int PacketHandler::factoryReset(HandlerBase *port, uint8_t id, uint8_t option, uint8_t *err)
+    {
+        uint8_t tx_packet[6] = {0};
+        uint8_t rx_packet[6] = {0};
+
+        tx_packet[PKT_ID] = id;
+        tx_packet[PKT_LENGTH] = 2;
+        tx_packet[PKT_INSTRUCTION] = 4;
+
+        return TxRxPacket(port, tx_packet, rx_packet, err);
+    }
+
+    int PacketHandler::readTx(HandlerBase *port, uint8_t id, uint16_t addr, uint16_t length)
+    {
+        int result = COMM_TX_FAIL;
+
+        uint8_t tx_packet = {0};
+
+        if(id >= BROADCAST_ID)
+        {
+            return COMM_NOT_AVAILABLE;
+        }
+        
+    }
 }

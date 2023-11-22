@@ -78,7 +78,7 @@ namespace jp200_hardware
             std::shared_ptr<jp200_hardware::HandlerBase> port_handler;
             std::shared_ptr<jp200_hardware::PacketHandler> packet_handler;
             std::vector<uint8_t> ids;
-            std::vector<JP200Cmd> msgs;
+            std::vector<JP200Cmd> cmds;
 
             JP200Cmd getJP200Param()
             {
@@ -151,6 +151,8 @@ namespace jp200_hardware
                 if(cmd.position_gain.enable)msg+="SG0=";
                 if(cmd.velocity_gain.enable)msg+="SG1=";
                 if(cmd.current_gain.enable)msg+="SG2=";
+
+                msg+=">";
 
                 return msg;
             }

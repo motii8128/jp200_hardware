@@ -11,7 +11,7 @@ namespace jp200_hardware
 {
     CallbackReturn JP200Hardware::on_init(const hardware_interface::HardwareInfo & info)
     {
-        RCLCPP_DEBUG(rclcpp::get_logger("JP200_driver"), "configure");
+        RCLCPP_DEBUG(rclcpp::get_logger("JP200_hardware_interface"), "configure");
         if(hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
         {
             return CallbackReturn::ERROR;
@@ -26,7 +26,6 @@ namespace jp200_hardware
         for(int i = 0; i < ids.size(); i++)
         {
             cmds[i] = getJP200Param();
-            createCmdBase(cmds[i]);
         }
 
         RCLCPP_INFO(rclcpp::get_logger("jp200_hardware_interface"), "initialize port handler");

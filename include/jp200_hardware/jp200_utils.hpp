@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 namespace jp200_hardware
 {
@@ -28,7 +29,7 @@ namespace jp200_hardware
 
             struct JP200Cmd
             {
-                uint8_t id;
+                const uint8_t id;
                 bool enable_control_mode;
                 uint8_t control_mode;
                 Cmd angle;
@@ -47,13 +48,15 @@ namespace jp200_hardware
                 Gains current_gain; 
             };
 
-            std::string createJp200Cmd(JP200Cmd cmd);
+            std::string createJp200Cmd(std::vector<JP200Cmd> cmds);
             void setTargetAngle(JP200Cmd cmd, std::string *packet);
             void setTargetVelocity(JP200Cmd cmd, std::string *packet);
             void setTargetCurrent(JP200Cmd cmd, std::string *packet);
             void setPWM(JP200Cmd cmd, std::string *packet);
             void setGetStateEnable(JP200Cmd cmd, std::string *packet);
-            void setControlGain(Gains gain, std::string *packet);
+            void setPositionGain(Gains gain, std::string *packet);
+            void setVelocityGain(Gains gain, std::string *packet);
+            void setCurrentGain(Gains gain, std::string *packet);
     };
 }
 

@@ -43,7 +43,6 @@ namespace jp200_hardware
             int boudrate;
             std::shared_ptr<jp200_hardware::HandlerBase> port_handler;
             std::shared_ptr<jp200_hardware::PacketHandler> packet_handler;
-            std::vector<uint8_t> ids;
             std::vector<jp200Utils::JP200Cmd> cmds;
 
             jp200Utils::JP200Cmd getJP200Param()

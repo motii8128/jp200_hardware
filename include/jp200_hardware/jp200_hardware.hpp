@@ -10,6 +10,7 @@
 
 #include "jp200_hardware/port_handler.hpp"
 #include "jp200_hardware/packet_handler.hpp"
+#include "jp200_hardware/jp200_utils.hpp"
 
 #include <vector>
 #include <string>
@@ -19,42 +20,7 @@ using hardware_interface::return_type;
 
 namespace jp200_hardware
 {
-    struct Gains
-    {
-        bool enable;
-        float p;
-        float i;
-        float d;
-        float f;
-    };
-
-    struct Cmd
-    {
-        bool enable;
-        float cmd;
-        float trajectory;
-        float transition_time;
-        bool get_state;
-    };
-
-    struct JP200Cmd
-    {
-        uint8_t id;
-        bool enable_control_mode;
-        uint8_t control_mode;
-        Cmd angle;
-        Cmd velocity;
-        Cmd current;
-        Cmd pwm;
-        bool get_mpu_temp;
-        bool get_amp_temp;
-        bool get_motor_temp;
-        bool get_voltage;
-        bool get_status;
-        Gains position_gain;
-        Gains velocity_gain;
-        Gains current_gain; 
-    };
+    
     class JP200Hardware : public hardware_interface::SystemInterface
     {
         public:
@@ -78,84 +44,50 @@ namespace jp200_hardware
             std::shared_ptr<jp200_hardware::HandlerBase> port_handler;
             std::shared_ptr<jp200_hardware::PacketHandler> packet_handler;
             std::vector<uint8_t> ids;
-            std::vector<JP200Cmd> cmds;
+            std::vector<jp200Utils::JP200Cmd> cmds;
 
-            JP200Cmd getJP200Param()
-            {
-                JP200Cmd cmd = {};
-                cmd.id = getHardwareParam<int>("id");
-                // 0~254
-                cmd.enable_control_mode = getHardwareParam<bool>("enable_control_mode");
-                cmd.control_mode = getHardwareParam<int>("control_mode");
-                /*
-                0:shutdown free mode
-                1:angle mode
-                2:velocity mode
-                3:angle+velocity mode
-                4:current mode 
-                5:angle+current mode 
-                6:velocity+current mode
-                7:angle+velocity+current mode
-                8:pwm mode
-                14:Stop(pwm) mode
-                15:shutdown break mode
-                */
+            jp200Utils::JP200Cmd getJP200Param()
+                {
+                    jp200Utils::JP200Cmd cmd = {};
+                    cmd.id = getHardwareParam<int>("id");
+                    // 0~254
+                    cmd.enable_control_mode = getHardwareParam<bool>("enable_control_mode");
+                    cmd.control_mode = getHardwareParam<int>("control_mode");
+                    /*
+                    0:shutdown free mode
+                    1:angle mode
+                    2:velocity mode
+                    3:angle+velocity mode
+                    4:current mode 
+                    5:angle+current mode 
+                    6:velocity+current mode
+                    7:angle+velocity+current mode
+                    8:pwm mode
+                    14:Stop(pwm) mode
+                    15:shutdown break mode
+                    */
 
-                cmd.angle.enable = getHardwareParam<bool>("target_angle");
-                cmd.velocity.enable = getHardwareParam<bool>("target_velocuty");
-                cmd.current.enable = getHardwareParam<bool>("target_current");
-                cmd.pwm.enable = getHardwareParam<bool>("target_pwm");
+                    cmd.angle.enable = getHardwareParam<bool>("target_angle");
+                    cmd.velocity.enable = getHardwareParam<bool>("target_velocuty");
+                    cmd.current.enable = getHardwareParam<bool>("target_current");
+                    cmd.pwm_enable = getHardwareParam<bool>("target_pwm");
 
-                cmd.angle.get_state = getHardwareParam<bool>("get_angle");
-                cmd.velocity.get_state = getHardwareParam<bool>("get_velocity");
-                cmd.current.get_state = getHardwareParam<bool>("get_current");
-                cmd.pwm.get_state = getHardwareParam<bool>("get_pwm");
+                    cmd.angle.get_state = getHardwareParam<bool>("get_angle");
+                    cmd.velocity.get_state = getHardwareParam<bool>("get_velocity");
+                    cmd.current.get_state = getHardwareParam<bool>("get_current");
+                    cmd.get_pwm = getHardwareParam<bool>("get_pwm");
 
-                cmd.get_mpu_temp = getHardwareParam<bool>("get_mpu_temp");
-                cmd.get_amp_temp = getHardwareParam<bool>("get_amp_temp");
-                cmd.get_motor_temp = getHardwareParam<bool>("get_motor_temp");
-                cmd.get_status = getHardwareParam<bool>("get_status");
+                    cmd.get_mpu_temp = getHardwareParam<bool>("get_mpu_temp");
+                    cmd.get_amp_temp = getHardwareParam<bool>("get_amp_temp");
+                    cmd.get_motor_temp = getHardwareParam<bool>("get_motor_temp");
+                    cmd.get_status = getHardwareParam<bool>("get_status");
 
-                cmd.position_gain.enable = getHardwareParam<bool>("set_position_gain");
-                cmd.velocity_gain.enable = getHardwareParam<bool>("set_position_gain");
-                cmd.current_gain.enable = getHardwareParam<bool>("set_current_gain");
-                
-                return cmd;
-            }
-            std::string createCmdBase(JP200Cmd cmd)
-            {
-                std::string msg = "<#";
-                msg += cmd.id;
-
-                if(cmd.enable_control_mode){
-                    msg += "EX=";
-                    msg += cmd.control_mode;
+                    cmd.position_gain.enable = getHardwareParam<bool>("set_position_gain");
+                    cmd.velocity_gain.enable = getHardwareParam<bool>("set_position_gain");
+                    cmd.current_gain.enable = getHardwareParam<bool>("set_current_gain");
+                    
+                    return cmd;
                 }
-
-                // cmd
-                if(cmd.angle.enable)msg+="TA=";
-                if(cmd.velocity.enable)msg+="TV=";
-                if(cmd.current.enable)msg+="TC=";
-                if(cmd.pwm.enable)msg+="TP=";
-
-                // get state
-                if(cmd.angle.get_state)msg+="CA";
-                if(cmd.velocity.get_state)msg+="CV";
-                if(cmd.current.get_state)msg+="CC";
-                if(cmd.pwm.get_state)msg+="CP";
-                if(cmd.get_mpu_temp)msg+="CT0";
-                if(cmd.get_amp_temp)msg+="CT1";
-                if(cmd.get_motor_temp)msg+="CT2";
-                if(cmd.get_voltage)msg+="CB";
-                if(cmd.get_status)msg+="ST";
-                if(cmd.position_gain.enable)msg+="SG0=";
-                if(cmd.velocity_gain.enable)msg+="SG1=";
-                if(cmd.current_gain.enable)msg+="SG2=";
-
-                msg+=">";
-
-                return msg;
-            }
         
             template <typename T>
             T getHardwareParam(const std::string param_name) const

@@ -2,6 +2,21 @@
 
 namespace jp200_hardware
 {
+    std::string jp200Utils::createJp200Cmd(JP200Cmd cmd)
+    {
+        std::string packet;
+
+        // command begin
+        packet += "<";
+
+        // set ID
+        packet += "#" + cmd.id;
+
+        packet += "EX=" + cmd.control_mode;
+
+        if(cmd.angle.enable)setTargetAngle(cmd, &packet);
+        if(cmd.velocity.enable)setTargetVelocity(cmd, &packet);
+    }
     void jp200Utils::setTargetAngle(JP200Cmd cmd, std::string *packet)
     {
             auto target_angle = std::to_string(cmd.angle.value * 100.0);

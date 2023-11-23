@@ -22,11 +22,7 @@ namespace jp200_hardware
         port_name = getHardwareParam<std::string>("port_name");
         boudrate = getHardwareParam<int>("baudrate");
 
-        RCLCPP_INFO(rclcpp::get_logger("jp200_hardware_interface"), "Get Hardware Parameter");
-        for(int i = 0; i < ids.size(); i++)
-        {
-            cmds[i] = getJP200Param();
-        }
+        
 
         RCLCPP_INFO(rclcpp::get_logger("jp200_hardware_interface"), "initialize port handler");
         port_handler = std::shared_ptr<jp200_hardware::HandlerBase>(HandlerBase::getHandler(port_name));

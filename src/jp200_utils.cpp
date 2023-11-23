@@ -57,5 +57,12 @@ namespace jp200_hardware
         if(cmd.angle.get_state)*packet += "CA";
         if(cmd.velocity.get_state)*packet += "CV";
         if(cmd.current.get_state)*packet += "CC";
+        if(cmd.get_pwm)*packet += "CP";
+        if(cmd.get_mpu_temp)*packet += "CT0";
+        if(cmd.get_amp_temp)*packet += "CT1";
+        if(cmd.get_motor_temp)*packet += "CT2";
+        if(cmd.get_voltage)*packet += "CB";
+        if(cmd.get_status)*packet += "ST";
     }
+    
 }

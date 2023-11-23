@@ -17,6 +17,7 @@ namespace jp200_hardware
                 *packet += ";" + target_transition_time;
             }
     }
+
     void jp200Utils::setTargetVelocity(JP200Cmd cmd, std::string *packet)
     {
             auto target_velocity = std::to_string(cmd.velocity.value * 1000.0);
@@ -32,6 +33,7 @@ namespace jp200_hardware
                 *packet += ";" + target_transition_time;
             }
     }
+
     void jp200Utils::setTargetCurrent(JP200Cmd cmd, std::string *packet)
     {
             auto target_current = std::to_string(cmd.current.value);
@@ -47,11 +49,13 @@ namespace jp200_hardware
                 *packet += ";" + target_transition_time;
             }
     }
+
     void jp200Utils::setPWM(JP200Cmd cmd, std::string *packet)
     {
             auto target_pwm = std::to_string(cmd.pwm_rate);
             *packet += "TP=" + target_pwm;
     }
+
     void jp200Utils::setGetStateEnable(JP200Cmd cmd, std::string *packet)
     {
         if(cmd.angle.get_state)*packet += "CA";
@@ -64,5 +68,68 @@ namespace jp200_hardware
         if(cmd.get_voltage)*packet += "CB";
         if(cmd.get_status)*packet += "ST";
     }
-    
+
+    void jp200Utils::setPositionGain(Gains gain, std::string *packet)
+    {
+        auto p_str = std::to_string(gain.p);
+        *packet += "SG0=" + p_str;
+        
+        if(gain.i != 0.0)
+        {
+            auto i_str = std::to_string(gain.i);
+            *packet += ";" + i_str;
+        }
+        if(gain.d != 0.0)
+        {
+            auto d_str = std::to_string(gain.d);
+            *packet += ";" + d_str;
+        }
+        if(gain.f != 0.0)
+        {
+            auto f_str = std::to_string(gain.f);
+            *packet += ";" + f_str;
+        }
+    }
+    void jp200Utils::setVelocityGain(Gains gain, std::string *packet)
+    {
+        auto p_str = std::to_string(gain.p);
+        *packet += "SG1=" + p_str;
+        
+        if(gain.i != 0.0)
+        {
+            auto i_str = std::to_string(gain.i);
+            *packet += ";" + i_str;
+        }
+        if(gain.d != 0.0)
+        {
+            auto d_str = std::to_string(gain.d);
+            *packet += ";" + d_str;
+        }
+        if(gain.f != 0.0)
+        {
+            auto f_str = std::to_string(gain.f);
+            *packet += ";" + f_str;
+        }
+    }
+    void jp200Utils::setCurrentGain(Gains gain, std::string *packet)
+    {
+        auto p_str = std::to_string(gain.p);
+        *packet += "SG2=" + p_str;
+        
+        if(gain.i != 0.0)
+        {
+            auto i_str = std::to_string(gain.i);
+            *packet += ";" + i_str;
+        }
+        if(gain.d != 0.0)
+        {
+            auto d_str = std::to_string(gain.d);
+            *packet += ";" + d_str;
+        }
+        if(gain.f != 0.0)
+        {
+            auto f_str = std::to_string(gain.f);
+            *packet += ";" + f_str;
+        }
+    }
 }
